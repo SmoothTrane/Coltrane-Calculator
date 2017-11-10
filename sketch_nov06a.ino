@@ -10,6 +10,10 @@ int prevSwitchState = 0;
 int state1 = 0;
 int reply;
 int digitalTest = 0;
+int switchTest = 1;
+int currentBit = 0;
+
+String byte1 = "1";
 
 void setup() {
      Serial.begin(9600); 
@@ -22,7 +26,25 @@ void setup() {
 
 }
 
+void switchBit(){
+//  if(byte1.length() == 0){
+//   byte1.concat("1");
+//  }
 
+   if(byte1[byte1.length()-1] == '1'){
+    byte1[byte1.length()-1] = '0';
+      
+    }
+    else{
+      byte1[byte1.length()-1]='1';
+    }
+    lcd.print(byte1);
+
+ }
+  
+  
+  
+  
 void enterByte(){
   
   
@@ -43,74 +65,35 @@ void loop() {
     delay(1000);
     digitalTest = 1;
   }
-//                   
+                 
   else if(digitalTest == 1 && switchState1 == HIGH && switchState2 == LOW){
  
       lcd.clear();
+      
           lcd.blink();
+         switchBit();
+         switchTest = 1;
+          // User presses right button, opens up bit 1, if user presses it again, it changes to 0
 
       
 
    }
-//   else if(digitalTest == 1 && switchState1 == LOW && switchState2 == HIGH){
-//    lcd.clear();
-//    
-//    }
 
+
+   else if(switchTest == 1 && switchState1 == LOW && switchState2 == HIGH){
+      if(byte1.length() <= 8){
+          lcd.clear();
+    lcd.blink();
+    lcd.print(byte1);
+        Serial.print("test");
+        switchTest = 0;
+
+              byte1+= '0';
+
+        }
     
-//  if(switchState1 != prevSwitchState && switchState2 != prevSwitchState){
-//    Serial.print(switchState1);
-//    Serial.print(switchState2);
-//    if(switchState1 == LOW && switchState2 == LOW){
-//      reply = random(8);
-//    
-//    lcd.clear();
-//    lcd.setCursor(0,0);
-//    lcd.print("The ball says: ");
-//    lcd.setCursor(0,1);
+    
+    }
+    
 
-//    switch(reply){
-//      case 0:
-//      lcd.print("Yes");
-//      break;
-//      case 1:
-//      lcd.print("Most likely");
-//      break;
-//      case 2:
-//      lcd.print("Certainly");
-//      break;
-//      case 3:
-//      lcd.print("Outlook good");
-//      break;
-//      case 4:
-//      lcd.print("Unsure");
-//      break;
-//      case 5:
-//      lcd.print("Ask again");
-//      break;
-//      case 6:
-//      lcd.print("Doubtful");
-//      break;
-//      case 7:
-//      lcd.print("No");
-//      break;
-//      
-//      }
-//    }
-//  }
-//  
-      prevSwitchState = switchState1;
-//  if(switchState1 == HIGH && switchState1 == HIGH){
-//    lcd.print("Enter");
-//    lcd.blink(q);
-//   
-//   }
-//   else{
-//    
-//    }
-//  lcd.display();
-//     lcd.print("Hello Friends");
-//    
-//    lcd.setCursor(0, 1);
-//     lcd.print("KesPra");
 }
