@@ -10,11 +10,16 @@ int prevSwitchState = 0;
 int state1 = 0;
 int reply;
 int digitalTest = 0;
-int switchTest = 1;
+int switchTest = 0;
+int byte2SwitchTest = 0;
 int currentBit = 0;
 
 String byte1 = "1";
+String byte2 = "1";
+bool byte1Max = 0;
+bool byte2Test = 0;
 
+int byte2DigitalTest = 0;
 void setup() {
      Serial.begin(9600); 
       analogWrite(9,2);
@@ -26,10 +31,8 @@ void setup() {
 
 }
 
-void switchBit(){
-//  if(byte1.length() == 0){
-//   byte1.concat("1");
-//  }
+void switchByte1(){
+
 
    if(byte1[byte1.length()-1] == '1'){
     byte1[byte1.length()-1] = '0';
@@ -41,7 +44,20 @@ void switchBit(){
     lcd.print(byte1);
 
  }
-  
+
+  void switchByte2(){
+
+
+   if(byte2[byte2.length()-1] == '1'){
+    byte2[byte2.length()-1] = '0';
+      
+    }
+    else{
+      byte2[byte2.length()-1]='1';
+    }
+    lcd.print(byte2);
+
+ }
   
   
   
@@ -71,9 +87,10 @@ void loop() {
       lcd.clear();
       
           lcd.blink();
-         switchBit();
+         switchByte1();
          switchTest = 1;
           // User presses right button, opens up bit 1, if user presses it again, it changes to 0
+          
 
       
 
@@ -81,19 +98,63 @@ void loop() {
 
 
    else if(switchTest == 1 && switchState1 == LOW && switchState2 == HIGH){
-      if(byte1.length() <= 8){
-          lcd.clear();
-    lcd.blink();
-    lcd.print(byte1);
-        Serial.print("test");
-        switchTest = 0;
+    Serial.print(switchTest);
+      if(byte1.length() < 8){
+   
 
               byte1+= '0';
+                     lcd.clear();
+    lcd.blink();
+    lcd.print(byte1);
+          switchTest = 0;
+
 
         }
-    
+        else{
+          byte1Max = 1;
+          byte2Test = 1;
+          }
+
+      
     
     }
+    else if(byte1Max == 1 && byte2Test == 1)
+    {
+      lcd.clear();
+      lcd.print("Press the right button to continue to add to byte 2");
+      switchTest = 0;
+      digitalTest = 0;
+      byte2Test = 0;
+      byte2DigitalTest = 1;
+
+      
+      }
+
+      else if(byte2DigitalTest == 1 && switchState1 == HIGH && switchState2 == LOW){
+         lcd.clear();
+          lcd.blink();
+         switchByte2();
+         Serial.print("test");
+         Serial.print(byte2);
+          byte2SwitchTest = 1;
+        
+        }
+        else if(byte2SwitchTest == 1 && switchState2 == HIGH && switchState1 == LOW){
+          
+
+      if(byte2.length() < 8){
+        byte2+= '0';
+        lcd.clear();
+        lcd.blink();
+        lcd.print(byte2);
+        byte2SwitchTest = 0;
+
+
+        }
+          
+          
+          
+          }
     
 
 }
