@@ -13,13 +13,18 @@ int digitalTest = 0;
 int switchTest = 0;
 int byte2SwitchTest = 0;
 int currentBit = 0;
-
+byte testLove = 111;
+byte testLove2 = 001;
 String byte1 = "1";
 String byte2 = "1";
 bool byte1Max = 0;
 bool byte2Test = 0;
-
+int  test = 2; 
+char testData[8];
 int byte2DigitalTest = 0;
+
+
+
 void setup() {
      Serial.begin(9600); 
       analogWrite(9,2);
@@ -27,9 +32,36 @@ void setup() {
      lcd.print("Welcome to");
      lcd.setCursor(0, 1);
      lcd.print("Coltrane's Calc");
+//     testNum(&testData);
+//     Serial.print(testData);
+
+
 
 
 }
+
+
+//void testNum(char byteNum[]){
+//  byteNum[0] = '0';
+//  byteNum->concat('0');
+
+ // *byteNum[byteNum->length()-1] = '0';
+
+
+//}
+
+//void switchBits(String *byteNum){
+//  if( == '1'){
+//    byteNum[0] = '0';
+//      
+//    }
+//    else{
+//      byteNum[0]= '1';
+//    }
+//    lcd.print(*byteNum);
+  
+//  }
+
 
 void switchByte1(){
 
@@ -58,14 +90,9 @@ void switchByte1(){
     lcd.print(byte2);
 
  }
+
+ 
   
-  
-  
-void enterByte(){
-  
-  
-  
-}
 
 void loop() {
   switchState1 = digitalRead(8);
@@ -88,6 +115,7 @@ void loop() {
       
           lcd.blink();
          switchByte1();
+      //  switchBits(&byte1);
          switchTest = 1;
           // User presses right button, opens up bit 1, if user presses it again, it changes to 0
           
@@ -98,7 +126,6 @@ void loop() {
 
 
    else if(switchTest == 1 && switchState1 == LOW && switchState2 == HIGH){
-    Serial.print(switchTest);
       if(byte1.length() < 8){
    
 
@@ -134,8 +161,7 @@ void loop() {
          lcd.clear();
           lcd.blink();
          switchByte2();
-         Serial.print("test");
-         Serial.print(byte2);
+      //  switchBits(&byte2);
           byte2SwitchTest = 1;
         
         }
@@ -150,7 +176,35 @@ void loop() {
         byte2SwitchTest = 0;
 
 
-        }
+        }else{
+          byte2DigitalTest = 0;
+          lcd.clear();
+          //toInt not properly converting to integer equivalent 
+         
+          int binary1 = byte1.toInt();
+          int binary2 = byte2.toInt();
+        
+          
+    int i = 0, remainder = 0, sum[20];
+
+    while (binary1 != 0 || binary2 != 0)
+    {
+        sum[i++] =(binary1 % 10 + binary2 % 10 + remainder) % 2;
+        remainder =(binary1 % 10 + binary2 % 10 + remainder) / 2;
+        binary1 = binary1 / 10;
+        binary2 = binary2 / 10;
+    }
+    if (remainder != 0){
+        sum[i++] = remainder;
+          --i;
+    }
+    while (i >= 0){
+        Serial.print(sum[i--]);
+    }
+       
+          
+          
+          }
           
           
           
@@ -158,3 +212,5 @@ void loop() {
     
 
 }
+
+
