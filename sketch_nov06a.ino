@@ -1,5 +1,6 @@
 #define LCD_Backlight;
 #include <LiquidCrystal.h>;
+#include <string.h>
 
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -15,8 +16,8 @@ int byte2SwitchTest = 0;
 int currentBit = 0;
 byte testLove = 111;
 byte testLove2 = 001;
-String byte1 = "1";
-String byte2 = "1";
+char* byte1 = "10101";
+char* byte2 = "1";
 bool byte1Max = 0;
 bool byte2Test = 0;
 int  test = 2; 
@@ -34,6 +35,10 @@ void setup() {
      lcd.print("Coltrane's Calc");
 //     testNum(&testData);
 //     Serial.print(testData);
+int test  = '5202' - '0';
+Serial.print(test + 2 );
+
+
 
 
 
@@ -66,12 +71,12 @@ void setup() {
 void switchByte1(){
 
 
-   if(byte1[byte1.length()-1] == '1'){
-    byte1[byte1.length()-1] = '0';
+   if(byte1[strlen(byte1)-1] == '1'){
+    byte1[strlen(byte1)-1] = '0';
       
     }
     else{
-      byte1[byte1.length()-1]='1';
+      byte1[strlen(byte1)-1]='1';
     }
     lcd.print(byte1);
 
@@ -80,19 +85,20 @@ void switchByte1(){
   void switchByte2(){
 
 
-   if(byte2[byte2.length()-1] == '1'){
-    byte2[byte2.length()-1] = '0';
+   if(byte2[strlen(byte2)-1] == '1'){
+    byte2[strlen(byte2)-1] = '0';
       
     }
     else{
-      byte2[byte2.length()-1]='1';
+      byte2[strlen(byte2)-1]='1';
     }
     lcd.print(byte2);
 
  }
 
- 
-  
+
+
+  /*
 
 void loop() {
   switchState1 = digitalRead(8);
@@ -126,10 +132,10 @@ void loop() {
 
 
    else if(switchTest == 1 && switchState1 == LOW && switchState2 == HIGH){
-      if(byte1.length() < 8){
+      if(strlen(byte1)< 8){
    
 
-              byte1+= '0';
+              byte1 = concat(byte1,"0");
                      lcd.clear();
     lcd.blink();
     lcd.print(byte1);
@@ -168,8 +174,8 @@ void loop() {
         else if(byte2SwitchTest == 1 && switchState2 == HIGH && switchState1 == LOW){
           
 
-      if(byte2.length() < 8){
-        byte2+= '0';
+      if(strlen(byte2) < 8){
+          byte2 = concat(byte2, "0");
         lcd.clear();
         lcd.blink();
         lcd.print(byte2);
@@ -181,8 +187,13 @@ void loop() {
           lcd.clear();
           //toInt not properly converting to integer equivalent 
          
-          int binary1 = byte1.toInt();
-          int binary2 = byte2.toInt();
+          int binary1 = atoi(byte1);
+          Serial.print("Binary1:");
+          Serial.print(binary1);
+          int binary2 = atoi(byte2);
+          Serial.print("Binary2:");
+          Serial.print(binary2);
+          
         
           
     int i = 0, remainder = 0, sum[20];
@@ -199,7 +210,7 @@ void loop() {
           --i;
     }
     while (i >= 0){
-        Serial.print(sum[i--]);
+        lcd.print(sum[i--]);
     }
        
           
@@ -211,6 +222,21 @@ void loop() {
           }
     
 
+}
+
+*/
+
+void loop(){}
+
+
+
+char* concat(const char *s1, const char *s2)
+{
+    char *result = malloc(strlen(s1)+strlen(s2)+1);//+1 for the null-terminator
+    //in real code you would check for errors in malloc here
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
 }
 
 
