@@ -2,6 +2,7 @@
 #include <LiquidCrystal.h>;
 #include <string.h>
 
+
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 const int switchPin = 6;
@@ -16,7 +17,7 @@ int byte2SwitchTest = 0;
 int currentBit = 0;
 byte testLove = 111;
 byte testLove2 = 001;
-char* byte1 = "10101";
+char* byte1 = "1";
 char* byte2 = "1";
 bool byte1Max = 0;
 bool byte2Test = 0;
@@ -35,8 +36,7 @@ void setup() {
      lcd.print("Coltrane's Calc");
 //     testNum(&testData);
 //     Serial.print(testData);
-int test  = '5202' - '0';
-Serial.print(test + 2 );
+
 
 
 
@@ -98,7 +98,7 @@ void switchByte1(){
 
 
 
-  /*
+  
 
 void loop() {
   switchState1 = digitalRead(8);
@@ -185,32 +185,24 @@ void loop() {
         }else{
           byte2DigitalTest = 0;
           lcd.clear();
-          //toInt not properly converting to integer equivalent 
-         
-          int binary1 = atoi(byte1);
-          Serial.print("Binary1:");
-          Serial.print(binary1);
-          int binary2 = atoi(byte2);
-          Serial.print("Binary2:");
-          Serial.print(binary2);
-          
-        
-          
-    int i = 0, remainder = 0, sum[20];
-
-    while (binary1 != 0 || binary2 != 0)
-    {
-        sum[i++] =(binary1 % 10 + binary2 % 10 + remainder) % 2;
-        remainder =(binary1 % 10 + binary2 % 10 + remainder) / 2;
-        binary1 = binary1 / 10;
-        binary2 = binary2 / 10;
+          long binary1, binary2;
+          binary1 = strtol(byte1,0,10);
+          binary2 = strtol(byte2,0,10);             
+          int incrementer = 0;
+          int carryVal = 0;
+          int summaryVal[20];
+          while (binary1 != 0 || binary2 != 0) {
+            summaryVal[incrementer++] =(binary1 % 10 + binary2 % 10 + carryVal) % 2;
+            carryVal =(binary1 % 10 + binary2 % 10 + carryVal) / 2;
+            binary1 = binary1 / 10;
+            binary2 = binary2 / 10;
+        }
+      if (carryVal != 0){
+        summaryVal[incrementer++] = carryVal;
+          --incrementer;
     }
-    if (remainder != 0){
-        sum[i++] = remainder;
-          --i;
-    }
-    while (i >= 0){
-        lcd.print(sum[i--]);
+    while (incrementer >= 0){       
+        lcd.print(summaryVal[incrementer--]);
     }
        
           
@@ -224,9 +216,7 @@ void loop() {
 
 }
 
-*/
 
-void loop(){}
 
 
 
