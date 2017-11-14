@@ -13,7 +13,10 @@ char* byte2 = "1";
 bool byte1Max = 0;
 bool byte2Start = 0;
 int byte2Ready = 0;
-
+int contrastReady = 0;
+int leftReady =0;
+int rightReady = 0;
+int i = 2;
 void setup() {
   Serial.begin(9600); 
   analogWrite(9,2);
@@ -38,12 +41,13 @@ void switchBits(char *byteNum){
   
 
 void loop() {
+    analogWrite(9,i);
+
+  
   switchState1 = digitalRead(8);
   switchState2 = digitalRead(7);
   if(switchState1 == HIGH  && switchState2 == HIGH && byte1Ready == 0){
     lcd.clear();
-    *byte1 = "1";
-    *byte2 = "1";
     lcd.setCursor(0,0);
     lcd.print("Press the right ");
     lcd.setCursor(0,1);
@@ -113,13 +117,35 @@ void loop() {
       }
       while (incrementer >= 0){       
           lcd.print(summaryVal[incrementer--]);
+         byte2IncrementReady = 0;
+         //lcd.print(byte2IncrementReady);
+          contrastReady = 1;
+         byte1Ready = -1;
          
       }      
-       
+      
           
     }        
-    
   }
+  else if(contrastReady == 1 && switchState1 == HIGH && switchState2 == HIGH){
+    lcd.clear();
+    lcd.print("Press right button to increase contrast");
+    lcd.setCursor(0,1);
+    lcd.print("Press left button to decrease contrast");
+    contrastReady = 0;
+    leftReady = 1;
+     rightReady = 1;
+    
+    }
+    else if(leftReady == 1 && switchState2 == HIGH && switchState1 == LOW){
+      i--;
+        
+      }
+
+      else if(rightReady ==  1 && switchState1 == HIGH && switchState2 == LOW){
+        i++;
+        
+        }
     
 
 }
